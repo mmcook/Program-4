@@ -41,13 +41,13 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 
 	private void insertHelper(IntervalADT<T> interval, IntervalNode<T> root) {
 		
-		if (interval.compareTo(root.getInterval()) < 1 && root.getLeftNode() != null) {
+		if (interval.compareTo(root.getInterval()) < 0 && root.getLeftNode() != null) {
 			insertHelper(interval, root.getLeftNode());
 		} else {
 			root.setLeftNode(new IntervalNode<T>(interval));
 		}
 		
-		if (interval.compareTo(root.getInterval()) > 1 && root.getRightNode() != null) {
+		if (interval.compareTo(root.getInterval()) > 0 && root.getRightNode() != null) {
 			insertHelper(interval, root.getLeftNode());
 		} else {
 			root.setRightNode(new IntervalNode<T>(interval));
@@ -76,20 +76,36 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 			tree.setInterval(node.getSuccessor().getInterval());
 			
 			if (node.getSuccessor().getRightNode() != null) {
-				return deleteHelper(node.getRightNode(), node.getSuccessor().getInterval());
+				IntervalNode<T> tempNode = deleteHelper(node.getRightNode(), node.getSuccessor().getInterval());
+				tempNode.setMaxEnd(recalculateMaxEnd(tempNode));
+				return tempNode;
 			}
 			else {
 				return node.getLeftNode();
 			}
 		}
 		else if (node.getInterval().compareTo(interval) < 0) {
-			node.setRightNode(deleteHelper(node.getRightNode(), node.getRightNode().getInterval()));
-			return node;
+			IntervalNode<T> tempNode = deleteHelper(node.getRightNode(), node.getRightNode().getInterval());
+			node.setRightNode(tempNode);
+			tempNode.setMaxEnd(recalculateMaxEnd(tempNode));
+			return tempNode;
 		}
 		else {
-			node.setLeftNode(deleteHelper(node.getLeftNode(), node.getLeftNode().getInterval()));
-			return node;
+			IntervalNode<T> tempNode = deleteHelper(node.getLeftNode(), node.getLeftNode().getInterval());
+			node.setLeftNode(tempNode);
+			tempNode.setMaxEnd(recalculateMaxEnd(tempNode));
+			return tempNode;
 		}				
+	}
+	
+	private T recalculateMaxEnd(IntervalNode<T> nodeToRecalculate)
+	{
+		IntervalNode<T> curr = nodeToRecalculate;
+		
+		while(curr.getRightNode() != null)
+			curr = curr.getRightNode();
+		
+		return curr.getMaxEnd();
 	}
 
 	@Override
