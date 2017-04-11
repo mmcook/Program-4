@@ -4,29 +4,55 @@ import java.util.List;
 public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T> {
 	
 	// TODO declare any data members needed for this class
-	private ArrayList<IntervalNode<T>> tree;
+	private IntervalNode<T> tree;
 	private int size = 0;
 	
 	public IntervalTree() {
-		tree = new ArrayList<IntervalNode<T>>();
+		tree = null;
+	}
+	
+	public IntervalTree(IntervalNode<T> root) {
+		tree = root;
 	}
 
 	@Override
 	public IntervalNode<T> getRoot() {
-		return tree.get(1);
+		return tree;
 	}
 
 	@Override
 	public void insert(IntervalADT<T> interval)
 					throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		IntervalNode<T> temp = new IntervalNode<T>(interval);
-		tree.add(temp);
-// Needs to reheapify
+		if (interval == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		else if (contains(interval) == true) {
+			throw new IllegalArgumentException();
+		}
+		
+		else {
+			insertHelper(interval, getRoot());
+		}
 		
 		size++;
 	}
 
+	private void insertHelper(IntervalADT<T> interval, IntervalNode<T> root) {
+		
+		if (interval.compareTo(root.getInterval()) < 1 && root.getLeftNode() != null) {
+			insertHelper(interval, root.getLeftNode());
+		} else {
+			root.setLeftNode(new IntervalNode<T>(interval));
+		}
+		
+		if (interval.compareTo(root.getInterval()) > 1 && root.getRightNode() != null) {
+			insertHelper(interval, root.getLeftNode());
+		} else {
+			root.setRightNode(new IntervalNode<T>(interval));
+		}
+	}
 	@Override
 	public void delete(IntervalADT<T> interval)
 					throws IntervalNotFoundException, IllegalArgumentException {
