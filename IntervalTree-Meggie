@@ -53,21 +53,28 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 	@Override
 	public List<IntervalADT<T>> findOverlapping(
 					IntervalADT<T> interval) {
+		
 		List<IntervalADT<T>> list = null;
+		
 		findOverlappingHelper(getRoot(),interval, list);
 		
-		
-		return null;
-		// TODO Auto-generated method stub
+		return list;
 	}
 
-	private void findOverlappingHelper(IntervalNode node, IntervalADT interval, List<IntervalADT<T>> result) {
-		if (node == null) {
+	private void findOverlappingHelper(IntervalNode<T> node, IntervalADT<T> interval, List<IntervalADT<T>> result) {
+		if (node == null) 
+		{
 			return;
 		}
 		
+		if(interval.overlaps(node.getInterval()))
+			result.add(interval);
 		
+		if(interval.getStart().compareTo(node.getLeftNode().getMaxEnd()) >= 0)
+			findOverlappingHelper(node.getLeftNode(), interval, result);
 		
+		else if(interval.getStart().compareTo(node.getRightNode().getMaxEnd()) >= 0)
+			findOverlappingHelper(node.getRightNode(), interval, result);
 	}
 	
 	@Override
