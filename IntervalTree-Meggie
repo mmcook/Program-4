@@ -50,6 +50,16 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 		// TODO Auto-generated method stub
 	}
 
+	private T recalculateMaxEnd(IntervalNode<T> nodeToRecalculate)
+	{
+		IntervalNode<T> curr = nodeToRecalculate;
+		
+		while(curr.getRightNode() != null)
+			curr = curr.getRightNode();
+		
+		return curr.getMaxEnd();
+	}
+	
 	@Override
 	public List<IntervalADT<T>> findOverlapping(
 					IntervalADT<T> interval) {
