@@ -28,10 +28,12 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 			throw new IllegalArgumentException();
 		}
 		
-		else if (contains(interval) == true) {
+		if (contains(interval) == true) {
 			throw new IllegalArgumentException();
 		}
-		
+		if (tree == null) {
+			tree = new IntervalNode<T>(interval);
+		}
 		else {
 			insertHelper(interval, getRoot());
 		}
@@ -39,27 +41,30 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 		size++;
 	}
 
-	private void insertHelper(IntervalADT<T> interval, IntervalNode<T> root) {
+	private void insertHelper(IntervalADT<T> interval, IntervalNode<T> node) {
 		
-		if (interval.compareTo(root.getInterval()) < 0 && root.getLeftNode() != null) {
-			insertHelper(interval, root.getLeftNode());
-		} else {
-			root.setLeftNode(new IntervalNode<T>(interval));
+		if (interval.compareTo(node.getInterval()) < 0 && node.getLeftNode() == null) {
+			node.setLeftNode(new IntervalNode<T>(interval));
+		} else if (interval.compareTo(node.getInterval()) < 0 && node.getLeftNode() != null){
+			insertHelper(interval, node.getLeftNode());
 		}
 		
-		if (interval.compareTo(root.getInterval()) > 0 && root.getRightNode() != null) {
-			insertHelper(interval, root.getLeftNode());
-		} else {
-			root.setRightNode(new IntervalNode<T>(interval));
+		if (interval.compareTo(node.getInterval()) > 0 && node.getRightNode() == null) {
+			node.setRightNode(new IntervalNode<T>(interval));
+		} else if (interval.compareTo(node.getInterval()) > 0 && node.getRightNode() != null){
+			insertHelper(interval, node.getRightNode());
 		}
 	}
 	@Override
 	public void delete(IntervalADT<T> interval)
 					throws IntervalNotFoundException, IllegalArgumentException {
-		
-
-		
-		
+		if (interval == null) {
+			throw new IllegalArgumentException();
+		}
+		if (contains(interval) == false) {
+			throw new IntervalNotFoundException("delete");
+		}
+		deleteHelper(getRoot(), interval);
 	}
 
 	@Override
@@ -72,10 +77,15 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 		}
 		size--;
 		
+		
 		if (node.getInterval().compareTo(interval) == 0) {
-			tree.setInterval(node.getSuccessor().getInterval());
-			
+			//node.setInterval(node.getSuccessor().getInterval());
+			if (node.getSuccessor() == null && node.getLeftNode() == null) {
+				node.setInterval(null);
+				return null;
+			}
 			if (node.getSuccessor().getRightNode() != null) {
+				node.setInterval(node.getSuccessor().getInterval());
 				IntervalNode<T> tempNode = deleteHelper(node.getRightNode(), node.getSuccessor().getInterval());
 				tempNode.setMaxEnd(recalculateMaxEnd(tempNode));
 				return tempNode;
