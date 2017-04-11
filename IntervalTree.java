@@ -59,7 +59,7 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 		
 
 		
-		size--;
+		
 	}
 
 	@Override
@@ -70,43 +70,54 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 		if (node == null) {
 			throw new IntervalNotFoundException("Something");
 		}
+		size--;
 		
 		if (node.getInterval().compareTo(interval) == 0) {
 			tree.setInterval(node.getSuccessor().getInterval());
 			
 			if (node.getSuccessor().getRightNode() != null) {
-				deleteHelper(node.getSuccessor(), interval)
+				return deleteHelper(node.getRightNode(), node.getSuccessor().getInterval());
+			}
+			else {
+				return node.getLeftNode();
 			}
 		}
-		
-		
-		
-		
-		
-		
-		return node;
-						
-						
-						
+		else if (node.getInterval().compareTo(interval) < 0) {
+			node.setRightNode(deleteHelper(node.getRightNode(), node.getRightNode().getInterval()));
+			return node;
+		}
+		else {
+			node.setLeftNode(deleteHelper(node.getLeftNode(), node.getLeftNode().getInterval()));
+			return node;
+		}				
 	}
 
 	@Override
 	public List<IntervalADT<T>> findOverlapping(
 					IntervalADT<T> interval) {
+		
 		List<IntervalADT<T>> list = null;
+		
 		findOverlappingHelper(getRoot(),interval, list);
 		
-		
-						return null;
-		// TODO Auto-generated method stub
+		return list;
 	}
 
-	private void findOverlappingHelper(IntervalNode node, IntervalADT interval, List<IntervalADT<T>> result) {
-		if (node == null) {
+	private void findOverlappingHelper(IntervalNode<T> node, IntervalADT<T> interval, List<IntervalADT<T>> result) {
+		if (node == null) 
+		{
 			return;
 		}
 		
-	}
+		if(interval.overlaps(node.getInterval()))
+			result.add(interval);
+		
+		if(interval.getStart().compareTo(node.getLeftNode().getMaxEnd()) >= 0)
+			findOverlappingHelper(node.getLeftNode(), interval, result);
+		
+		else if(interval.getStart().compareTo(node.getRightNode().getMaxEnd()) >= 0)
+			findOverlappingHelper(node.getRightNode(), interval, result);
+		}
 	
 	@Override
 	public List<IntervalADT<T>> searchPoint(T point) {
