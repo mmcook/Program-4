@@ -1,0 +1,150 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T> {
+	
+	// TODO declare any data members needed for this class
+	private ArrayList<IntervalNode<T>> tree;
+	private int size = 0;
+	private IntervalNode<T> root;
+	
+	public IntervalTree() {
+		tree = new ArrayList<IntervalNode<T>>();
+	}
+	
+	public IntervalTree(IntervalNode<T> root)
+	{
+		this.root = root;
+	}
+
+	@Override
+	public IntervalNode<T> getRoot() {
+		return root;
+	}
+
+	@Override
+	public void insert(IntervalADT<T> interval)
+					throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		IntervalNode<T> temp = new IntervalNode<T>(interval);
+		tree.add(temp);
+		// Needs to reheapify
+		
+		size++;
+	}
+
+	@Override
+	public void delete(IntervalADT<T> interval)
+					throws IntervalNotFoundException, IllegalArgumentException {
+		// TODO Auto-generated method stub
+
+		
+		size--;
+	}
+
+	@Override
+	public IntervalNode<T> deleteHelper(IntervalNode<T> node,
+					IntervalADT<T> interval)
+					throws IntervalNotFoundException, IllegalArgumentException {
+						return node;
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public List<IntervalADT<T>> findOverlapping(
+					IntervalADT<T> interval) {
+		List<IntervalADT<T>> list = null;
+		findOverlappingHelper(getRoot(),interval, list);
+		
+		
+		return null;
+		// TODO Auto-generated method stub
+	}
+
+	private void findOverlappingHelper(IntervalNode node, IntervalADT interval, List<IntervalADT<T>> result) {
+		if (node == null) {
+			return;
+		}
+		
+		
+		
+	}
+	
+	@Override
+	public List<IntervalADT<T>> searchPoint(T point) {
+		
+		if (point == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		return null;
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public int getSize() {
+		return size;
+	}
+
+	@Override
+	public int getHeight() {
+		
+		  if (size == 0) return 0;
+		  
+		  else if (size == 1) return 1;
+		  
+		  else return (int) (Math.sqrt(size) + 1);
+		 
+		
+		
+		//return getHeightHelper(getRoot());
+		// TODO Auto-generated method stub
+	}
+	
+	/*private int getHeightHelper(IntervalNode<T> node) {
+		if (node == null) { // Not totally correct but it is a start
+			return 0;
+		}
+		return 1 + getHeightHelper(node.getLeftNode());
+	}*/
+
+	@Override
+	public boolean contains(IntervalADT<T> interval) {
+		
+		if (interval == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		/*for (int i = 1; i <= size; i++) {
+			if (tree.get(i).equals(interval)){
+				return true;
+			}
+		}*/
+		
+		return containsHelper(interval, root);
+	}
+
+	private boolean containsHelper(IntervalADT<T> interval, IntervalNode<T> node) {
+		
+		if (node == null) return false;
+		
+		if(node.getInterval().compareTo(interval) == 0) return true;
+		
+		//If interval comes before the nodes interval, go to the left node
+		if(node.getInterval().compareTo(interval) > 0)
+			return containsHelper(interval, node.getLeftNode());
+		
+		//If interval comes after the nodes interval, go to the right node
+		else
+			return containsHelper(interval, node.getRightNode());
+	}
+	
+	@Override
+	public void printStats() {
+		System.out.println("-----------------------------------------");
+		System.out.println("Height: " + getHeight());
+		System.out.println("Size: " + getSize());
+		System.out.println("-----------------------------------------");
+	}
+
+}
