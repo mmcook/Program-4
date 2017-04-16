@@ -43,7 +43,7 @@ public class Interval<T extends Comparable<T>> implements IntervalADT<T> {
 //    	if( (start.compareTo(other.getStart()) <= 0 && end.compareTo(other.getStart()) >= 0) || 
 //    			(start.compareTo(other.getEnd()) <= 0 && end.compareTo(other.getEnd()) >= 0))
     	
-    	if(end.compareTo(other.getStart()) >= 0 || start.compareTo(other.getEnd()) >= 0)
+    	if(getEnd().compareTo(other.getStart()) >= 0 || getStart().compareTo(other.getEnd()) >= 0)
     		return true;
     	
     	//Otherwise, return false
@@ -53,7 +53,7 @@ public class Interval<T extends Comparable<T>> implements IntervalADT<T> {
     @Override
     public boolean contains(T point) {
     	//Return true if point is within the interval, false otherwise 
-    	if(start.compareTo(point) <= 0 && end.compareTo(point) >= 0)
+    	if(getStart().compareTo(point) <= 0 && getEnd().compareTo(point) >= 0)
     		return true;
     	return false;
     }
@@ -63,15 +63,15 @@ public class Interval<T extends Comparable<T>> implements IntervalADT<T> {
     public int compareTo(IntervalADT<T> other) {
         // TODO Auto-generated method stub
     	
-    	if(start.compareTo(other.getStart()) > 0) return 1;
+    	if(getStart().compareTo(other.getStart()) > 0) return 1;
     	
-    	else if(start.compareTo(other.getStart()) < 0 ) return -1;
+    	else if(getStart().compareTo(other.getStart()) < 0 ) return -1;
     	
-    	else if(start.compareTo(other.getStart()) == 0)
+    	else if(getStart().compareTo(other.getStart()) == 0)
     	{
-    		if(end.compareTo(other.getEnd()) > 0) return 1;
+    		if(getEnd().compareTo(other.getEnd()) > 0) return 1;
     		
-    		else if(start.compareTo(other.getStart()) < 0) return -1;
+    		else if(getEnd().compareTo(other.getEnd()) < 0) return -1;
     	}
     	
     	return 0;
