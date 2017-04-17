@@ -201,12 +201,14 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 		if(interval.overlaps(node.getInterval()))
 			result.add(interval);
 		
-		if(interval.getStart().compareTo(node.getLeftNode().getMaxEnd()) >= 0)
-			findOverlappingHelper(node.getLeftNode(), interval, result);
-		
-		else if(interval.getStart().compareTo(node.getRightNode().getMaxEnd()) >= 0)
-			findOverlappingHelper(node.getRightNode(), interval, result);
+		if (node.getLeftNode() != null) {
+			if(interval.getStart().compareTo(node.getLeftNode().getMaxEnd()) >= 0)
+				findOverlappingHelper(node.getLeftNode(), interval, result);
+			
+			else if(interval.getStart().compareTo(node.getRightNode().getMaxEnd()) >= 0)
+				findOverlappingHelper(node.getRightNode(), interval, result);
 		}
+	}
 	
 	/**
 	 * Search and return a list of all intervals containing a given point. 
