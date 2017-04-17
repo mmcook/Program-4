@@ -199,7 +199,7 @@ public class IntervalTree<T extends Comparable<T>> implements IntervalTreeADT<T>
 			return;
 		
 		if(interval.overlaps(node.getInterval()))
-			result.add(interval);
+			result.add(node.getInterval());
 		
 		if (node.getLeftNode() != null) {
 			if(interval.getStart().compareTo(node.getLeftNode().getMaxEnd()) >= 0)
