@@ -32,8 +32,11 @@ public class IntervalNode<T extends Comparable<T>> {
 	 */
 	public IntervalNode(IntervalADT<T> interval) {
 		this.interval = interval;
+		
 		maxEnd = interval.getEnd();
+		
 		rightNode = null;
+		
 		leftNode = null;
 	}
 
@@ -44,11 +47,13 @@ public class IntervalNode<T extends Comparable<T>> {
 	 * @return in-order successor node
 	 */
 	public IntervalNode<T> getSuccessor() {
+		
 		if(getRightNode() == null)
 			return null;
 	
 		IntervalNode<T> curr = getRightNode();
 		
+		//Find the left-most node in right subtree
 		while(curr.getLeftNode() != null)
 			curr = curr.getLeftNode();
 		
