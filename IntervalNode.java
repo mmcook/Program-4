@@ -7,6 +7,8 @@
  * 
  * This class will be used while constructing the IntervalTree.
  *
+ * @author Jake Vande Walle, Meggie Cook
+ *
  * @param <T>
  *            the template parameter for the data field - interval.
  */

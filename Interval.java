@@ -13,7 +13,7 @@
  * 
  * @param <T>
  *            the template param for start/end fields.
- * @author Meggie Cook
+ * @author Meggie Cook, Jake Vande Walle
  */
 public class Interval<T extends Comparable<T>> implements IntervalADT<T> {
 
