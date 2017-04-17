@@ -1,3 +1,14 @@
+/**
+ * 
+ * The Interval Tree Class is responsible for handling the storage of the 
+ * Interval Nodes. The code organizes the tree properly and also can 
+ * handle the calculation of the MaxEnd variable.
+ * 
+ * @author Jake Vande Walle, Meggie Cook
+ * 
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
